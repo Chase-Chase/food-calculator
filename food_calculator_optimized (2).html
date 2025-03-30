@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор еды</title>
+    <style>
+        body {
+            font-family: "Verdana", sans-serif;
+            background-color: #FFF5F7;
+            color: #6B4E71;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background: #FFFAFA;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #9E5E6F;
+        }
+        input {
+            width: 80%;
+            padding: 12px;
+            font-size: 16px;
+            text-align: center;
+            border: 1px solid #E5B4B4;
+            border-radius: 8px;
+            background-color: #FFF0F5;
+            transition: all 0.3s ease-in-out;
+        }
+        input:focus {
+            outline: none;
+            border-color: #E6739F;
+            background-color: #FFE5EC;
+        }
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            color: #D75A88;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 style="color: #9E5E6F;">Калькулятор еды</h2>
+
+        <div class="input-group">
+            <label for="beforeCook">Вес до готовки (г):</label>
+            <input type="number" id="beforeCook" step="0.01">
+        </div>
+
+        <div class="input-group">
+            <label for="afterCook">Вес после готовки (г):</label>
+            <input type="number" id="afterCook" step="0.01">
+        </div>
+
+        <div class="input-group">
+            <label for="neededBefore">Необходимый вес до готовки (г):</label>
+            <input type="number" id="neededBefore" step="0.01">
+        </div>
+
+        <div class="input-group result">
+            <label>Необходимый вес после приготовления (г):</label>
+            <span id="neededAfter">-</span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let inputs = document.querySelectorAll("input");
+            inputs.forEach(input => {
+                input.addEventListener("input", calculate);
+                input.addEventListener("change", calculate);
+                input.addEventListener("focusout", calculate); // Срабатывает при выходе из поля
+            });
+        });
+
+        function calculate() {
+            let beforeCook = parseFloat(document.getElementById("beforeCook").value);
+            let afterCook = parseFloat(document.getElementById("afterCook").value);
+            let neededBefore = parseFloat(document.getElementById("neededBefore").value);
+            let resultElement = document.getElementById("neededAfter");
+
+            console.log("beforeCook:", beforeCook, "afterCook:", afterCook, "neededBefore:", neededBefore);
+
+            if (isNaN(beforeCook) || isNaN(afterCook) || isNaN(neededBefore)) {
+                resultElement.innerHTML = "-";
+                return;
+            }
+
+            if (beforeCook > 0 && afterCook > 0 && neededBefore > 0) {
+                let neededAfter = (afterCook / beforeCook) * neededBefore;
+                
+                setTimeout(() => {
+                    resultElement.innerHTML = neededAfter.toFixed(2) + " г";
+                }, 10);
+            } else {
+                resultElement.innerHTML = "-";
+            }
+        }
+    </script>
+
+</body>
+</html>
